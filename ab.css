@@ -1,0 +1,44 @@
+#bbb{
+    font-size:30px
+}
+#aaa{
+    font-size:30px
+}
+
+.btn0{
+    width: 80px;
+    height: 40px; 
+}
+.btn1{
+    width: 80px;
+    height: 40px; 
+    margin-left: 2%
+}
+
+.btn{
+    width: 180px;
+    height: 40px; 
+    margin-left: 40%
+}
+
+.btn00{
+    width: 80px;
+    height: 40px; 
+}
+.btn11{
+    width: 80px;
+    height: 40px; 
+    margin-left: 2%
+}
+#ccc{
+    width: 480px;
+    height: 440px; 
+    overflow:auto;
+    background-color:rgb(154, 154, 168);
+}
+.inin{
+    width: 180px;
+    height: 140px; 
+    margin-left: 2%;
+    background-color:ghostwhite
+}
