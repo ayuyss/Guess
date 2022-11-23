@@ -22,7 +22,7 @@ document.querySelector('.btn1').addEventListener('click',function(){
 })
 
 
-    var web3 = new Web3(window.web3.currentProvider);    
+    var web3 = new Web3(web3.currentProvider);    
     var abi =[
         {
             "inputs": [
