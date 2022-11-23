@@ -125,7 +125,8 @@ document.querySelector('.btn1').addEventListener('click',function(){
     var address ="0x842FAD747C8AC9526A62782842C26C8B1Ffa5Dd2"
     var Contract = new web3.eth.Contract(abi,address);
 
-    async function connectWallet() {        
+    async function connectWallet() {    
+           
         await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: '0x61' }]						
@@ -156,17 +157,18 @@ document.querySelector('.btn1').addEventListener('click',function(){
         })		  			
     }
    connectWallet()
-
-async function bet0(){
+   
+async function bet0(){    
     var accounts =await web3.eth.getAccounts()
-    if (document.querySelector('.btn').value != accounts[0] | web3.eth.net.getId()!=97) {
+    web3.eth.net.getId().then(function(data){
+    if (document.querySelector('.btn').value != accounts[0] | data != 97) {
         connectWallet()    
         }else{
         Contract.methods.bet("0").send({from:accounts[0],value:web3.utils.toWei('0.1')}).then(function(){
          document.getElementById('ccc').innerHTML ='<div class="inin"><p>No.'+count+'</p><p>Guess: 0</p><p>result: none</p><input type="button" value="wait"></div>' + document.getElementById('ccc').innerHTML    
         count+=1        
         })
-    }
+    }})
 }
 
 document.querySelector('.btn00').addEventListener('click',function(){
@@ -175,14 +177,15 @@ document.querySelector('.btn00').addEventListener('click',function(){
 
 async function bet1(){
     var accounts =await web3.eth.getAccounts()
-    if (document.querySelector('.btn').value != accounts[0] | web3.eth.net.getId()!=97) {
+    web3.eth.net.getId().then(function(data){
+    if (document.querySelector('.btn').value != accounts[0] | data!=97) {
         connectWallet()    
         }else{
         Contract.methods.bet("1").send({from:accounts[0],value:web3.utils.toWei('0.1')}).then(function(){
          document.getElementById('ccc').innerHTML ='<div class="inin"><p>No.'+count+'</p><p>Guess: 0</p><p>result: none</p><input type="button" value="wait"></div>' + document.getElementById('ccc').innerHTML    
         count+=1        
         })
-    }
+    }})
 }
 
 document.querySelector('.btn11').addEventListener('click',function(){
@@ -201,7 +204,8 @@ function clear(){
 async function see(){
     c=event.target.id
     var accounts = await web3.eth.getAccounts()
-    if (document.querySelector('.btn').value != accounts[0] | web3.eth.net.getId()!=97) {
+    web3.eth.net.getId().then(function(data){
+    if (document.querySelector('.btn').value != accounts[0] | data!=97) {
         connectWallet()    
         }else{
         Contract.methods.see(c).send({from:accounts[0]}).then(function(){
@@ -211,5 +215,5 @@ async function see(){
             document.getElementById(c).value = 'seen'
             document.getElementById(c).disabled = 'ture'
         })
-    }
+    }})
 }
