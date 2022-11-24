@@ -22,7 +22,7 @@ document.querySelector('.btn1').addEventListener('click',function(){
 })
 
 
-    var web3 = new Web3(web3.currentProvider);    
+    var web3 = new Web3(window.web3.currentProvider);    
     var abi =[
         {
             "inputs": [
@@ -126,11 +126,12 @@ document.querySelector('.btn1').addEventListener('click',function(){
     var Contract = new web3.eth.Contract(abi,address);
 
     async function connectWallet() {    
-           
-        await ethereum.request({
+        web3.eth.net.getId().then(function(data){if (data!=97){alert('not BSC test')}}) 
+        await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: '0x61' }]						
         })
+        
         await web3.eth.requestAccounts().then(() => {                        	
         });
         var accounts = await web3.eth.getAccounts()
