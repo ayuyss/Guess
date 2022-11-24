@@ -217,3 +217,155 @@ async function see(){
         })
     }})
 }
+$( document ).ready(function() {
+    console.log( "ready!" );
+
+    console.log("window.ethereum===",window.ethereum)
+     //判断是否支持浏览器钱包
+     if (!window.ethereum) {
+        alert("没有浏览器钱包，请先下载浏览器钱包");
+        return false;
+    }
+    
+    // 获取服务提供器，若没有，则可设置成自己的服务提供器
+    if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        web3 = new Web3(new Web3.providers.HttpProvider("https://192.168.237.110:8545"));
+    }
+
+    /* 节点信息 - 提前加载 */
+    web3.eth.getNodeInfo(function(error, result){
+        if(error){
+            console.log( "error" ,error);
+        }
+        else{
+            $('#NodeInfo').val(result);
+        }
+    });
+    /* 事件 - 查询账户余额 */
+			$('#checkBalance').click(function() {
+			    var _account = $('#Account').val();
+				if (_account == "") {
+					alert("请输入账户地址");
+					return;
+				}
+				web3.eth.getBalance(_account).then(function(result){
+					$('#Balance').val(web3.utils.fromWei(result, 'ether'));
+				});
+			});
+			
+			
+			/* 事件 - 转账 */
+			$('#Transfer').click(function() {
+				$('#Tx').text('');
+				var _from = $('#From').val();
+			    var _to = $('#To').val();
+				var _Amount = $('#Amount').val();
+				
+				if (_from == "") {
+					alert("请入输入账户地址");
+					return;
+				}
+				
+				if (_to == "") {
+					alert("请入输出账户地址");
+					return;
+				}
+				
+				if (_Amount == "") {
+					alert("请入输入转账金额");
+					return;
+				}
+				var txnObject = {
+					"from":_from,
+					"to": _to,
+					"value": web3.utils.toWei(_Amount,'ether'),
+					"gas": 3000000,        // (可选)
+					// "gasPrice": 4500000,  (可选)
+					// "data": 'For testing' (可选)
+					// "nonce": 10           (可选)
+				}
+			
+				web3.eth.sendTransaction(txnObject, function(error, result){
+					if(error){
+						alert("转账失败，错误信息：" + error.message);
+					}
+					else{
+						//显示生成的交易hash
+						var txn_hash = result; 
+						$('#Tx').text(txn_hash);
+					}
+				});
+				
+			});
+
+			
+			/* 合约 */
+			// 合约地址
+			var address = $("#address").val();
+			// 合约ABI
+			var abi = $("#abi").val();
+			abi = JSON.parse(abi);
+
+			// 创建合约对象
+			var myContract = new web3.eth.Contract(abi, address);
+
+			// 显示消息
+			function getMsg() {			
+				myContract.methods.getMsg().call().then(function(msg){
+						$("#getMsg").val(msg);
+					});
+			}
+
+			// 显示消息 - 提前显示
+			getMsg();
+
+			/* 事件 - 查询消息 */
+			$("#GetMsg").click(function() {
+				getMsg();
+			});
+
+			/* 事件 - 设置消息 */
+			$("#SetMsg").click(function() {
+
+				var newMsg = $("#setMsg").val();
+				if (newMsg == "") {
+					alert("请输入要设置的消息");
+					return;
+				}
+
+				const sendFunc = async () => {
+					try {
+						const accounts = await web3.eth.getAccounts();
+
+						//调用合约函数
+						myContract.methods.setMsg(newMsg).send({
+							from: accounts[0],
+							gas: 3000000
+						}).on("transactionHash", function(hash){
+							// 显示交易Hash
+							$('#TxContract').text(hash);
+						}).on("receipt", function(receipt) {
+							console.log("receipt==", receipt);
+							if (receipt.status) {
+								alert("设置成功");
+							} else {
+								alert("设置失败");
+							}
+						}).on("error", function(error) {
+							alert("交易发生错误：" + error);
+						});
+
+						return accounts;
+
+					} catch (err) {
+						console.log(err);
+					}
+				}
+
+				sendFunc();
+			});
+
+		
+		});
