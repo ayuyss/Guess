@@ -127,7 +127,7 @@ document.querySelector('.btn1').addEventListener('click',function(){
 
     async function connectWallet() {    
            
-        await window.ethereum.request({
+        await ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: '0x61' }]						
         })
