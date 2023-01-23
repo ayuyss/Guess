@@ -155,7 +155,7 @@ document.querySelector('.btn1').addEventListener('click',function(){
             }
             })
         }   
-        count = data - -1              
+        count = a - -1              
         	
     }
    connectWallet()
