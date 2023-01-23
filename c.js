@@ -125,7 +125,8 @@ document.querySelector('.btn1').addEventListener('click',function(){
     var address ="0x842FAD747C8AC9526A62782842C26C8B1Ffa5Dd2"
     var Contract = new web3.eth.Contract(abi,address);
 
-    async function connectWallet() {    
+    async function connectWallet() {
+        var a      
         web3.eth.net.getId().then(function(data){if (data!=97){alert('not BSC test')}}) 
         await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
@@ -139,23 +140,23 @@ document.querySelector('.btn1').addEventListener('click',function(){
         var balance = await web3.eth.getBalance(accounts[0])
         document.getElementById('ddd').innerHTML = web3.utils.fromWei(balance)
         clear()
-        await Contract.methods.codelength(accounts[0]).call().then(function(data){
-            for (let x = data; x >= 1; x-- ) { 
-                Contract.methods.code(accounts[0],x-1).call().then(function(data2){                           
-                BlockNumber = web3.eth.getBlockNumber()
-                if (data2[0]+5 > BlockNumber) {
-                document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: none</p><input type="button" value="wait 15s"></div>'
+        await Contract.methods.codelength(accounts[0]).call().then(function(data){a = data})
+        for (let x = a; x >= 1; x-- ) { 
+            await Contract.methods.code(accounts[0],x-1).call().then(function(data2){                           
+            BlockNumber = web3.eth.getBlockNumber()
+            if (data2[0]+5 > BlockNumber) {
+            document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: none</p><input type="button" value="wait 15s"></div>'
+            }else{
+                if (data2[3]) {
+                document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: '+data2[2]+'</p><input type="button" value="seen" disabled ></div>'
                 }else{
-                    if (data2[3]) {
-                    document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: '+data2[2]+'</p><input type="button" value="seen" disabled ></div>'
-                    }else{
-                    document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p id="a'+x+'">result: none</p><input type="button" id="'+x+'" value="see" onclick="see()"></div>'
-                    }                
-                }
-                })
-            }   
-            count = data - -1              
-        })		  			
+                document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p id="a'+x+'">result: none</p><input type="button" id="'+x+'" value="see" onclick="see()"></div>'
+                }                
+            }
+            })
+        }   
+        count = data - -1              
+        	
     }
    connectWallet()
    
