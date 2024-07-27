@@ -125,39 +125,39 @@
 //     var address ="0x842FAD747C8AC9526A62782842C26C8B1Ffa5Dd2"
 //     var Contract = new web3.eth.Contract(abi,address);
 
-//     async function connectWallet() {    
-//         web3.eth.net.getId().then(function(data){if (data!=97){alert('not BSC test')}}) 
-//         await window.ethereum.request({
-//             method: 'wallet_switchEthereumChain',
-//             params: [{ chainId: '0x61' }]						
-//         })
+    async function connectWallet() {    
+        web3.eth.net.getId().then(function(data){if (data!=97){alert('not BSC test')}}) 
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x61' }]						
+        })
         
-//         await web3.eth.requestAccounts().then(() => {                        	
-//         });
-//         var accounts = await web3.eth.getAccounts()
-//         document.querySelector('.btn').value = await accounts[0]
-//         var balance = await web3.eth.getBalance(accounts[0])
-//         document.getElementById('ddd').innerHTML = web3.utils.fromWei(balance)
-//         clear()
-//         await Contract.methods.codelength(accounts[0]).call().then(function(data){
-//             for (let x = data; x >= 1; x-- ) { 
-//                 Contract.methods.code(accounts[0],x-1).call().then(function(data2){                           
-//                 BlockNumber = web3.eth.getBlockNumber()
-//                 if (data2[0]+5 > BlockNumber) {
-//                 document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: none</p><input type="button" value="wait 15s"></div>'
-//                 }else{
-//                     if (data2[3]) {
-//                     document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: '+data2[2]+'</p><input type="button" value="seen" disabled ></div>'
-//                     }else{
-//                     document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p id="a'+x+'">result: none</p><input type="button" id="'+x+'" value="see" onclick="see()"></div>'
-//                     }                
-//                 }
-//                 })
-//             }   
-//             count = data - -1              
-//         })		  			
-//     }
-//    connectWallet()
+        await web3.eth.requestAccounts().then(() => {                        	
+        });
+        var accounts = await web3.eth.getAccounts()
+        document.querySelector('.btn').value = await accounts[0]
+        var balance = await web3.eth.getBalance(accounts[0])
+        document.getElementById('ddd').innerHTML = web3.utils.fromWei(balance)
+        clear()
+        await Contract.methods.codelength(accounts[0]).call().then(function(data){
+            for (let x = data; x >= 1; x-- ) { 
+                Contract.methods.code(accounts[0],x-1).call().then(function(data2){                           
+                BlockNumber = web3.eth.getBlockNumber()
+                if (data2[0]+5 > BlockNumber) {
+                document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: none</p><input type="button" value="wait 15s"></div>'
+                }else{
+                    if (data2[3]) {
+                    document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p>result: '+data2[2]+'</p><input type="button" value="seen" disabled ></div>'
+                    }else{
+                    document.getElementById('ccc').innerHTML = document.getElementById('ccc').innerHTML + '<div class="inin"><p>No.'+x+'</p><p>Guess: '+data2[1]+'</p><p id="a'+x+'">result: none</p><input type="button" id="'+x+'" value="see" onclick="see()"></div>'
+                    }                
+                }
+                })
+            }   
+            count = data - -1              
+        })		  			
+    }
+   connectWallet()
    
 // async function bet0(){    
 //     var accounts =await web3.eth.getAccounts()
@@ -202,23 +202,19 @@
 // }
 
 
-// async function see(){
-//     c=event.target.id
-//     var accounts = await web3.eth.getAccounts()
-//     web3.eth.net.getId().then(function(data){
-//     if (document.querySelector('.btn').value != accounts[0] | data!=97) {
-//         connectWallet()    
-//         }else{
-//         Contract.methods.see(c).send({from:accounts[0]}).then(function(){
-//             Contract.methods.code(accounts[0],c-1).call().then(function(data){
-//             document.getElementById('a'+c).innerHTML= 'result: '+ data[2]
-//             })
-//             document.getElementById(c).value = 'seen'
-//             document.getElementById(c).disabled = 'ture'
-//         })
-//     }})
-// }
-
-document.getElementById('fff').addEventListener('click',function(){
-    document.getElementById('ggg').src=document.getElementById('eee').value
-})
+async function see(){
+    c=event.target.id
+    var accounts = await web3.eth.getAccounts()
+    web3.eth.net.getId().then(function(data){
+    if (document.querySelector('.btn').value != accounts[0] | data!=97) {
+        connectWallet()    
+        }else{
+        Contract.methods.see(c).send({from:accounts[0]}).then(function(){
+            Contract.methods.code(accounts[0],c-1).call().then(function(data){
+            document.getElementById('a'+c).innerHTML= 'result: '+ data[2]
+            })
+            document.getElementById(c).value = 'seen'
+            document.getElementById(c).disabled = 'ture'
+        })
+    }})
+}
